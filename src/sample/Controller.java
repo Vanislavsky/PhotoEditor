@@ -14,7 +14,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -60,8 +62,8 @@ public class Controller {
         AnchorPane superParent = null;
 
         DraggableNode() throws IOException {
-            FXMLLoader fxmlLoader = FXMLLoader.load(getClass().getResource("DraggableNode.fxml"));
-            fxmlLoader.setRoot(this);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DraggableNode.fxml"));
+           // fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
 
             fxmlLoader.load();
@@ -252,8 +254,9 @@ public class Controller {
         }
 
         public NodeLink() throws IOException {
-            FXMLLoader fxmlLoader = FXMLLoader.load(getClass().getResource("NodeLink.fxml"));
-            fxmlLoader.setRoot(this);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NodeLink.fxml"));
+
+            //fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             try {
                 fxmlLoader.load();
@@ -282,6 +285,7 @@ public class Controller {
         btn2 = new DraggableNode();
 
         layout.getChildren().addAll(btn1, btn2);
+        System.out.println(layout);
     }
 }
 
