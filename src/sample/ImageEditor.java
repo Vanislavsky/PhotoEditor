@@ -1,8 +1,12 @@
 package sample;
 
-import com.sun.prism.Image;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class ImageEditor {
@@ -45,5 +49,19 @@ public class ImageEditor {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void saveToFile() throws IOException {
+       // String fileType = monochrome.equals(imageView.getEffect()) ? "Monochrome" : "Color";
+        File output = new File("Photo"  + ".png");
+
+        ImageIO.write(SwingFXUtils.fromFXImage(endNode.content.snapshot(null, null), null), "png", output);
+//        File outputFile = new File("/Users/sergejvanislavskij/Desktop/phots");
+//        BufferedImage bImage = SwingFXUtils.fromFXImage(endNode.content.getImage(), null);
+//        try {
+//            ImageIO.write(bImage, "png", outputFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

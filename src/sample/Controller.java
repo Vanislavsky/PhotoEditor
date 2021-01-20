@@ -57,6 +57,9 @@ public class Controller {
     @FXML
     private MenuItem seleectButton;
 
+    @FXML
+    private MenuItem saveButton;
+
     ImageEditor imageEditor;
 
     @FXML
@@ -72,6 +75,16 @@ public class Controller {
                     exception.printStackTrace();
                 }
 
+            }
+        });
+
+        saveButton.setOnAction(actionEvent -> {
+            if(imageEditor != null) {
+                try {
+                    imageEditor.saveToFile();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
             }
         });
 
