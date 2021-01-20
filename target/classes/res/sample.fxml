@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="858.0" prefWidth="1453.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <AnchorPane fx:id="layout">
+    </AnchorPane>
+    <left>
+        <VBox prefHeight="497.0" prefWidth="132.0" style="-fx-spacing: 7; -fx-padding: 7;" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="addBlackAndWhiteNode" mnemonicParsing="false" prefHeight="61.0" prefWidth="133.0" text="Черно-белое" />
+            <Button fx:id="addBlurMode" mnemonicParsing="false" prefHeight="63.0" prefWidth="118.0" text="Блюр" />
+            <Button fx:id="addBloomNode" mnemonicParsing="false" prefHeight="63.0" prefWidth="118.0" text="Цветение" />
+            <Button fx:id="addSepiaNode" mnemonicParsing="false" prefHeight="63.0" prefWidth="122.0" text="Сепия" />
+            <Button fx:id="addReflectionNode" mnemonicParsing="false" prefHeight="63.0" prefWidth="118.0" text="Отражение" />
+            </children>
+         <opaqueInsets>
+            <Insets right="10.0" top="10.0" />
+         </opaqueInsets>
+        </VBox>
+    </left>
+   <center>
+      <AnchorPane fx:id="layout" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

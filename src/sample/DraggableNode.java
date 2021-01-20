@@ -81,7 +81,7 @@ class DraggableNode extends AnchorPane {
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         fxmlLoader.load();
-        content.setImage(new Image(new FileInputStream("/Users/sergejvanislavskij/Desktop/joda.jpg")));
+        content.setImage(new Image(new FileInputStream("src/res/joda.jpg")));
         setId(UUID.randomUUID().toString());
 
     }
