@@ -24,7 +24,7 @@ class NodeLink extends AnchorPane {
     SimpleDoubleProperty offsetDirY2 = new SimpleDoubleProperty();
 
     public NodeLink() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NodeLink.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../res/NodeLink.fxml"));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

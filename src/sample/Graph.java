@@ -4,6 +4,7 @@ import javafx.scene.effect.Bloom;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -47,22 +48,15 @@ class Graph {
             }
         }
 
-//        for(var node : nodes) {
-//            if(node.getId().equals(endNode)) {
-//                if(!node.checkEffect) {
-//                    node.effect.effect();
-//                    node.checkEffect = true;
-//                }
-//            }
-//        }
-
     }
 
     static void deleteNode(String id) {
-        for(var node : data) {
-            if(node.getKey().equals(id) || node.getValue().equals(id)) {
-                data.remove(node);
-            }
+        System.out.println(data);
+        Iterator<Pair<String, String>> it = data.iterator();
+        while (it.hasNext()) {
+            Pair<String, String> relationship = it.next();
+            if(relationship.getKey().equals(id) || relationship.getValue().equals(id))
+                it.remove();
         }
     }
 
@@ -72,6 +66,14 @@ class Graph {
                 return node;
         }
         return null;
+    }
+
+    static void deleteCheckLine(String id) {
+        for(var relationship : data) {
+            if(relationship.getValue().equals(id)) {
+                searchById(relationship.getKey()).checkLine = false;
+            }
+        }
     }
 
     static void  addPrevEffects(String id) {

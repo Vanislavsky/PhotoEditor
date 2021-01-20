@@ -21,9 +21,7 @@ import javafx.util.Pair;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.UUID;
 
@@ -65,6 +63,7 @@ class DraggableNode extends AnchorPane {
     EventHandler<DragEvent> contextLinkDagDropped;
 
     NodeLink link = new NodeLink();
+    boolean checkLine = false;
     private final ArrayList <String> linkIds = new ArrayList <String> ();
     Point2D offset = new Point2D(0.0, 0.0);
 
@@ -78,7 +77,7 @@ class DraggableNode extends AnchorPane {
 
 
     DraggableNode() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DraggableNode.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../res/DraggableNode.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         fxmlLoader.load();
@@ -95,6 +94,7 @@ class DraggableNode extends AnchorPane {
 
         deleteButton.setOnAction(actionEvent -> {
 
+            Graph.deleteCheckLine(this.getId());
             Graph.deleteNode(this.getId());
             prevEffects.clear();
             for(var node : Graph.nodes) {
@@ -318,6 +318,11 @@ class DraggableNode extends AnchorPane {
         linkDragDetected = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if(dragType == DragType.ENDNODE)
+                    return;
+                if(checkLine)
+                    return;
+
                 getParent().setOnDragOver(null);
                 getParent().setOnDragDropped(null);
 
@@ -384,8 +389,9 @@ class DraggableNode extends AnchorPane {
 
                         }
 
-                        if (source != null && target != null) {
+                        if (source != null && target != null && target.getId() != Graph.startNode) {
                             link.bindStartEnd(source, target);
+                            source.checkLine = true;
                             source.registerLink(link.getId());
                             registerLink(link.getId());
                             if(effect != null) {
