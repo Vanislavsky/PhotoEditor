@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -52,97 +54,51 @@ public class Controller {
 
     @FXML
     private Button addReflectionNode;
+    @FXML
+    private MenuItem seleectButton;
+
+    ImageEditor imageEditor;
 
     @FXML
     void initialize() throws IOException {
 
-        var startNode = new DraggableNode();
-        var endNode = new DraggableNode();
+        seleectButton.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            var file =fileChooser.showOpenDialog(seleectButton.getParentPopup().getScene().getWindow());
+            if(file != null) {
+                try {
+                    imageEditor = new ImageEditor(layout, file.getPath());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
 
-        startNode.setType(DragType.STARTNODE);
-        endNode.setType(DragType.ENDNODE);
-
-        Graph.nodes.add(startNode);
-        Graph.nodes.add(endNode);
-        Graph.startNode = startNode.getId();
-        Graph.endNode = endNode.getId();
-
-        layout.getChildren().addAll(startNode, endNode);
-
-        startNode.setLayoutX(20);
-        startNode.setLayoutY(100);
-        endNode.setLayoutX(450);
-        endNode.setLayoutY(100);
+            }
+        });
 
 
         addBlackAndWhiteNode.setOnAction(actionEvent -> {
-            try {
-                var newNode = new DraggableNode();
-                newNode.setType(DragType.BLACKANDWHITE);
-                Graph.nodes.add(newNode);
-                layout.getChildren().add(newNode);
-                newNode.setLayoutX(layout.getWidth() / 2);
-                newNode.setLayoutY(layout.getHeight() / 2);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
+            if(imageEditor != null)
+                imageEditor.addNode(DragType.BLACKANDWHITE);
         });
 
         addBlurMode.setOnAction(actionEvent -> {
-            try {
-                var newNode = new DraggableNode();
-                newNode.setType(DragType.MOTIONBLUR);
-                Graph.nodes.add(newNode);
-                layout.getChildren().add(newNode);
-                newNode.setLayoutX(layout.getWidth() / 2);
-                newNode.setLayoutY(layout.getHeight() / 2);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
+            if(imageEditor != null)
+                imageEditor.addNode(DragType.MOTIONBLUR);
         });
 
         addBloomNode.setOnAction(actionEvent -> {
-            try {
-                var newNode = new DraggableNode();
-                newNode.setType(DragType.BLOOM);
-                Graph.nodes.add(newNode);
-                layout.getChildren().add(newNode);
-                newNode.setLayoutX(layout.getWidth() / 2);
-                newNode.setLayoutY(layout.getHeight() / 2);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
+            if(imageEditor != null)
+                imageEditor.addNode(DragType.BLOOM);
         });
 
         addSepiaNode.setOnAction(actionEvent -> {
-            try {
-                var newNode = new DraggableNode();
-                newNode.setType(DragType.SepiaTone);
-                Graph.nodes.add(newNode);
-                layout.getChildren().add(newNode);
-                newNode.setLayoutX(layout.getWidth() / 2);
-                newNode.setLayoutY(layout.getHeight() / 2);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
+            if(imageEditor != null)
+                imageEditor.addNode(DragType.SepiaTone);
         });
 
         addReflectionNode.setOnAction(actionEvent -> {
-            try {
-                var newNode = new DraggableNode();
-                newNode.setType(DragType.Reflection);
-                Graph.nodes.add(newNode);
-                layout.getChildren().add(newNode);
-                newNode.setLayoutX(layout.getWidth() / 2);
-                newNode.setLayoutY(layout.getHeight() / 2);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
+            if(imageEditor != null)
+                imageEditor.addNode(DragType.Reflection);
         });
 
     }

@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Pair;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -54,6 +55,8 @@ class DraggableNode extends AnchorPane {
     @FXML
     ImageView content;
 
+    static String imagePath = null;
+
     EventHandler<DragEvent> contextDragOver;
     EventHandler<DragEvent> contextDragDropped;
 
@@ -76,15 +79,18 @@ class DraggableNode extends AnchorPane {
     public ArrayList<Pair<String, Effect>> prevEffects = new ArrayList<>();
 
 
-    DraggableNode() throws IOException {
+    DraggableNode(String path) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../res/DraggableNode.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         fxmlLoader.load();
-        content.setImage(new Image(new FileInputStream("src/res/joda.jpg")));
+        imagePath = path;
+        if(imagePath != null)
+            content.setImage(new Image(new FileInputStream(imagePath)));
         setId(UUID.randomUUID().toString());
 
     }
+
 
 
     @FXML
