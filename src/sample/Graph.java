@@ -21,6 +21,7 @@ class Graph {
     }
 
     static void detoir() {
+
         String tempNode = startNode;
         while(tempNode != endNode) {
 
@@ -38,13 +39,46 @@ class Graph {
 
             for(var node : nodes) {
                 if(node.getId().equals(tempNode)) {
-                    //TODO
-                    //node.content.setEffect(new Bloom(0.2));
-                    //node.content.setText(tempNode);
-                    //new Filter("RED");
+                    if(!node.checkEffect) {
+                        node.effect.effect();
+                        node.checkEffect = true;
+                    }
                 }
             }
         }
 
+//        for(var node : nodes) {
+//            if(node.getId().equals(endNode)) {
+//                if(!node.checkEffect) {
+//                    node.effect.effect();
+//                    node.checkEffect = true;
+//                }
+//            }
+//        }
+
+    }
+
+    static void deleteNode(String id) {
+        for(var node : data) {
+            if(node.getKey().equals(id) || node.getValue().equals(id)) {
+                data.remove(node);
+            }
+        }
+    }
+
+    static DraggableNode searchById(String id) {
+        for(var node : nodes) {
+            if(node.getId().equals(id))
+                return node;
+        }
+        return null;
+    }
+
+    static void  addPrevEffects(String id) {
+        for(var relationship : data) {
+            if(relationship.getValue().equals(id)) {
+                searchById(relationship.getValue()).prevEffects.addAll(searchById(relationship.getKey()).prevEffects);
+            }
+        }
     }
 }

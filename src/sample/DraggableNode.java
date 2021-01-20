@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.UUID;
 
 interface Effective {
@@ -64,6 +65,7 @@ class DraggableNode extends AnchorPane {
     EventHandler<DragEvent> contextLinkDagDropped;
 
     NodeLink link = new NodeLink();
+    private final ArrayList <String> linkIds = new ArrayList <String> ();
     Point2D offset = new Point2D(0.0, 0.0);
 
     AnchorPane superParent = null;
@@ -71,7 +73,8 @@ class DraggableNode extends AnchorPane {
     DragType dragType = null;
     public Effective effect;
     public DeleteEffective deleteEffect;
-    public static ArrayList<Pair<String, Effect>> prevEffects = new ArrayList<>();
+    public boolean checkEffect = false;
+    public ArrayList<Pair<String, Effect>> prevEffects = new ArrayList<>();
 
 
     DraggableNode() throws IOException {
@@ -89,6 +92,44 @@ class DraggableNode extends AnchorPane {
     void initialize() {
         nodeHandlers();
         linkHandlers();
+
+        deleteButton.setOnAction(actionEvent -> {
+
+            Graph.deleteNode(this.getId());
+            prevEffects.clear();
+            for(var node : Graph.nodes) {
+                node.prevEffects.clear();
+                node.content.setEffect(null);
+                node.checkEffect = false;
+            }
+
+            Graph.detoir();
+
+            AnchorPane parent  = (AnchorPane) this.getParent();
+            parent.getChildren().remove(this);
+            System.out.println(parent.getChildren());
+            System.out.println(linkIds);
+
+            for (ListIterator<String> iterId = linkIds.listIterator();
+                 iterId.hasNext();) {
+
+                String id = iterId.next();
+
+                for (ListIterator <Node> iterNode = parent.getChildren().listIterator();
+                     iterNode.hasNext();) {
+
+                    Node node = iterNode.next();
+
+                    if (node.getId() == null)
+                        continue;
+
+                    if (node.getId().equals(id))
+                        iterNode.remove();
+                }
+
+                iterId.remove();
+            }
+        });
 
         leftLinkPane.setOnMouseMoved(mouseEvent -> {
             leftLinkPane.setStyle("-fx-background-color: #778899");
@@ -129,6 +170,7 @@ class DraggableNode extends AnchorPane {
                 effect = ()-> {
                     Bloom bloom = new Bloom(0.2);
                     content.setEffect(bloom);
+                    Graph.addPrevEffects(getId());
                     for(var effect : prevEffects) {
                         bloom.setInput(effect.getValue());
                     }
@@ -136,15 +178,12 @@ class DraggableNode extends AnchorPane {
                     prevEffects.add(new Pair<>(getId(), bloom));
                 };
 
-                deleteEffect = () -> {
-
-                };
-
                 effectName.setText("Цветение");
                 break;
             case SepiaTone:
                 effect = ()-> {
                     SepiaTone sepiaTone = new SepiaTone();
+                    Graph.addPrevEffects(getId());
                     for(var effect : prevEffects) {
                         sepiaTone.setInput(effect.getValue());
                     }
@@ -158,6 +197,7 @@ class DraggableNode extends AnchorPane {
                     MotionBlur motionBlur = new MotionBlur();
                     motionBlur.setRadius(10.5);
                     motionBlur.setAngle(45);
+                    Graph.addPrevEffects(getId());
                     for(var effect : prevEffects) {
                         motionBlur.setInput(effect.getValue());
                     }
@@ -171,6 +211,7 @@ class DraggableNode extends AnchorPane {
                 effect = ()-> {
                     ColorAdjust colorAdjust = new ColorAdjust();
                     colorAdjust.setSaturation(-1);
+                    Graph.addPrevEffects(getId());
                     for(var effect : prevEffects) {
                         colorAdjust.setInput(effect.getValue());
                     }
@@ -184,6 +225,7 @@ class DraggableNode extends AnchorPane {
                 effect = ()-> {
                     System.out.println("рефлексия");
                     Reflection reflection = new Reflection();
+                    Graph.addPrevEffects(getId());
                     for(var effect : prevEffects) {
                         reflection.setInput(effect.getValue());
                     }
@@ -201,6 +243,7 @@ class DraggableNode extends AnchorPane {
 
                     // этот эффект не сработает, переменная нужна только в качестве контейнера
                     Bloom resEffect = new Bloom(1);
+                    Graph.addPrevEffects(getId());
                     for (var effect : prevEffects) {
                         resEffect.setInput(effect.getValue());
                     }
@@ -215,6 +258,10 @@ class DraggableNode extends AnchorPane {
                 break;
 
         }
+    }
+
+    public void registerLink(String linkId) {
+        linkIds.add(linkId);
     }
 
     void updatePoint(Point2D point) {
@@ -273,6 +320,7 @@ class DraggableNode extends AnchorPane {
             public void handle(MouseEvent mouseEvent) {
                 getParent().setOnDragOver(null);
                 getParent().setOnDragDropped(null);
+
 
                 getParent().setOnDragOver(contextLinkDragOver);
                 getParent().setOnDragDropped(contextLinkDagDropped);
@@ -338,8 +386,10 @@ class DraggableNode extends AnchorPane {
 
                         if (source != null && target != null) {
                             link.bindStartEnd(source, target);
+                            source.registerLink(link.getId());
+                            registerLink(link.getId());
                             if(effect != null) {
-                                effect.effect();
+                                Graph.detoir();
                             }
 
                         }
@@ -350,8 +400,6 @@ class DraggableNode extends AnchorPane {
 
                 event.setDropCompleted(true);
                 event.consume();
-
-                Graph.detoir();
             }
         };
 

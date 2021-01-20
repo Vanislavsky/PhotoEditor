@@ -53,60 +53,26 @@ public class Controller {
     @FXML
     private Button addReflectionNode;
 
-
-    //LinkedList<DraggableNode> nodes = new LinkedList<DraggableNode>();
-
     @FXML
     void initialize() throws IOException {
-////////////// BLACK AND WHITE //////////////////////
-//        ColorAdjust effect = new ColorAdjust();
-//        effect.setSaturation(-1);
-////////////////////////////////////////////////
 
+        var startNode = new DraggableNode();
+        var endNode = new DraggableNode();
 
-//////////// BLOOM  //////////////////////
-//        Bloom effect = new Bloom(0.2);
-//
-////////////////////////////////////////////////
+        startNode.setType(DragType.STARTNODE);
+        endNode.setType(DragType.ENDNODE);
 
+        Graph.nodes.add(startNode);
+        Graph.nodes.add(endNode);
+        Graph.startNode = startNode.getId();
+        Graph.endNode = endNode.getId();
 
-        ///////////////// SepiaTone  //////////////////////
-//         Effect sepia = new SepiaTone();;
-//
-////////////////////////////////////////////////
+        layout.getChildren().addAll(startNode, endNode);
 
-
-
-        ///////////////// MotionBlur  //////////////////////
-//        MotionBlur motionBlur = new MotionBlur();
-//
-//        //Setting the radius to the effect
-//        motionBlur.setRadius(10.5);
-//
-//        //Setting angle to the effect
-//        motionBlur.setAngle(45);
-//
-////////////////////////////////////////////////
-
-
-        //Setting the radius to apply the Gaussian Blur effect
-        //ImageView view = new ImageView(new Image(new FileInputStream("/Users/sergejvanislavskij/Desktop/joda.jpg")));
-
-
-        var btn1 = new DraggableNode();
-        var btn2 = new DraggableNode();
-
-        btn1.setType(DragType.STARTNODE);
-        btn2.setType(DragType.ENDNODE);
-
-        Graph.nodes.add(btn1);
-        Graph.nodes.add(btn2);
-        Graph.startNode = btn1.getId();
-        Graph.endNode = btn2.getId();
-
-        layout.getChildren().addAll(btn1, btn2);
-        btn2.setLayoutX(30);
-        btn2.setLayoutY(100);
+        startNode.setLayoutX(20);
+        startNode.setLayoutY(100);
+        endNode.setLayoutX(450);
+        endNode.setLayoutY(100);
 
 
         addBlackAndWhiteNode.setOnAction(actionEvent -> {
